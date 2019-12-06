@@ -1,16 +1,18 @@
 <template>
   <div
     class="product align-center w-100 pb20"
+    @click="sendDataToRecomendations()"
     v-observe-visibility="visibilityChanged"
   >
     <router-link
+
       class="block no-underline product-link"
       :to="productLink"
       data-testid="productLink"
     >
       <div
         class="product-image relative bg-cl-secondary"
-        :class="[{ sale: labelsActive && isOnSale }, { new: labelsActive && isNew }]"
+        :class="[{ rec: labelsActive && isRec }, { sale: labelsActive && isOnSale }, { new: labelsActive && isNew }]"
       >
         <product-image
           class="product-image__content"
@@ -21,7 +23,7 @@
       </div>
 
       <p class="mb0 cl-accent mt10" v-if="!onlyImage">
-        {{ product.name | htmlDecode }}
+        {{ product.id }}{{ product.name | htmlDecode }}
       </p>
 
       <span
@@ -53,6 +55,7 @@ import rootStore from '@vue-storefront/core/store'
 import { ProductTile } from '@vue-storefront/core/modules/catalog/components/ProductTile.ts'
 import config from 'config'
 import ProductImage from './ProductImage'
+import { mapGetters } from 'vuex';
 
 export default {
   mixins: [ProductTile],
@@ -70,6 +73,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters('user', ['isLoggedIn']),
     thumbnailObj () {
       return {
         src: this.thumbnail,
@@ -78,6 +82,22 @@ export default {
     }
   },
   methods: {
+    sendDataToRecomendations () {
+      this.$store.dispatch('recommendation-engine/load',
+        { 'useCase': 'also',
+          'basket': [this.product.id],
+          'context': null,
+          'count': 4
+        });
+      this.$store.dispatch('recommendation-engine/load',
+        { 'useCase': 'sim',
+          'basket': [this.product.id],
+          'context': null,
+          'count': 4
+        });
+      this.$store.dispatch('recommendation-engine/ingest',
+        { item: this.product.id });
+    },
     onProductPriceUpdate (product) {
       if (product.sku === this.product.sku) {
         Object.assign(this.product, product)
@@ -137,7 +157,9 @@ $color-white: color(white);
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40px;
+  width: fit-content;
+  padding-right: 10px;
+  padding-left: 10px;
   height: 40px;
   background-color: $border-secondary;
   text-transform: uppercase;
@@ -156,7 +178,8 @@ $color-white: color(white);
       opacity: 1;
       transform: scale(1.1);
     }
-    &.sale::after,
+    &.sale::after
+    &.rec::after
     &.new::after{
       opacity: .8;
     }
@@ -187,6 +210,12 @@ $color-white: color(white);
     &::after {
       @extend %label;
       content: 'New';
+    }
+  }
+  &.rec{
+    &::after {
+      @extend %label;
+      content: 'Recommend';
     }
   }
 }

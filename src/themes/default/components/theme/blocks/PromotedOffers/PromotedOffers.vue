@@ -10,6 +10,7 @@
           <div
             class="offer"
             v-lazy:background-image="banner.image"
+            :key="banner.image"
           >
             <h2 class="title m0 h1">
               {{ banner.title }}
@@ -31,6 +32,7 @@
             <div
               class="offer offer-small border-box p5 flex bg-cl-th-accent"
               v-lazy:background-image="banner.image"
+              :key="banner.image"
             >
               <h2 class="title m0 h1">
                 {{ banner.title }}
@@ -83,8 +85,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      banners: 'promoted/getPromotedOffers'
-    })
+      promotedBanners: 'promoted/getPromotedOffers',
+      recBanners: 'recommendation-engine/banners'
+    }),
+    ...mapGetters('user', ['isLoggedIn']),
+    banners () {
+      return this.recBanners ? this.recBanners : this.promotedBanners
+    }
   },
   async created () {
     await this.updatePromotedOffers()

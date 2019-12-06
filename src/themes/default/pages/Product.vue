@@ -1,41 +1,60 @@
 <template>
-  <div id="product" itemscope itemtype="http://schema.org/Product">
+  <div id="product"
+       itemscope
+       itemtype="http://schema.org/Product"
+  >
     <section class="bg-cl-secondary px20 product-top-section">
       <div class="container">
         <section class="row m0 between-xs">
           <div class="col-xs-12 col-md-6 center-xs middle-xs image">
-            <product-gallery
-              :offline="image"
-              :gallery="gallery"
-              :configuration="configuration"
-              :product="product"
+            <product-gallery :offline="image"
+                             :gallery="gallery"
+                             :configuration="configuration"
+                             :product="product"
             />
           </div>
           <div class="col-xs-12 col-md-5 data">
-            <breadcrumbs
-              class="pt40 pb20 hidden-xs"
-              :routes="breadcrumbs.routes"
-              :active-route="breadcrumbs.name"
+            <breadcrumbs class="pt40 pb20 hidden-xs"
+                         :routes="breadcrumbs.routes"
+                         :active-route="breadcrumbs.name"
             />
-            <h1 class="mb20 mt0 cl-mine-shaft product-name" data-testid="productName" itemprop="name">
+            <h1 class="mb20 mt0 cl-mine-shaft product-name"
+                data-testid="productName"
+                itemprop="name"
+            >
               {{ product.name | htmlDecode }}
-              <web-share :title="product.name | htmlDecode" text="Check this product!" class="web-share" />
+              <web-share :title="product.name | htmlDecode"
+                         text="Check this product!"
+                         class="web-share"
+              />
             </h1>
-            <div class="mb20 uppercase cl-secondary" itemprop="sku" :content="product.sku">
+            <div class="mb20 uppercase cl-secondary"
+                 itemprop="sku"
+                 :content="product.sku"
+            >
               {{ $t('SKU') }}: {{ product.sku }}
             </div>
-            <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-              <meta itemprop="priceCurrency" :content="currentStore.i18n.currencyCode">
-              <meta itemprop="price" :content="parseFloat(product.priceInclTax).toFixed(2)">
-              <meta itemprop="availability" :content="structuredData.availability">
-              <meta itemprop="url" :content="product.url_path">
-              <div
-                class="mb40 price serif"
-                v-if="product.type_id !== 'grouped'"
+            <div itemprop="offers"
+                 itemscope
+                 itemtype="http://schema.org/Offer"
+            >
+              <meta itemprop="priceCurrency"
+                    :content="currentStore.i18n.currencyCode"
               >
-                <div
-                  class="h3 cl-secondary"
-                  v-if="product.special_price && product.priceInclTax && product.originalPriceInclTax"
+              <meta itemprop="price"
+                    :content="parseFloat(product.priceInclTax).toFixed(2)"
+              >
+              <meta itemprop="availability"
+                    :content="structuredData.availability"
+              >
+              <meta itemprop="url"
+                    :content="product.url_path"
+              >
+              <div class="mb40 price serif"
+                   v-if="product.type_id !== 'grouped'"
+              >
+                <div class="h3 cl-secondary"
+                     v-if="product.special_price && product.priceInclTax && product.originalPriceInclTax"
                 >
                   <span class="h2 cl-mine-shaft weight-700">
                     {{ product.priceInclTax * product.qty | price }}
@@ -44,27 +63,28 @@
                     {{ product.originalPriceInclTax * product.qty | price }}
                   </span>
                 </div>
-                <div
-                  class="h2 cl-mine-shaft weight-700"
-                  v-if="!product.special_price && product.priceInclTax"
+                <div class="h2 cl-mine-shaft weight-700"
+                     v-if="!product.special_price && product.priceInclTax"
                 >
                   {{ product.qty > 0 ? product.priceInclTax * product.qty : product.priceInclTax | price }}
                 </div>
               </div>
-              <div
-                class="cl-primary variants"
-                v-if="product.type_id =='configurable' && !loading"
+              <div class="cl-primary variants"
+                   v-if="product.type_id =='configurable' && !loading"
               >
-                <div class="error" v-if="product.errors && Object.keys(product.errors).length > 0">
+                <div class="error"
+                     v-if="product.errors && Object.keys(product.errors).length > 0"
+                >
                   {{ product.errors | formatProductMessages }}
                 </div>
-                <div
-                  class="h5"
-                  v-for="(option, index) in product.configurable_options"
-                  v-if="(!product.errors || Object.keys(product.errors).length === 0) && Object.keys(configuration).length > 0"
-                  :key="index"
+                <div class="h5"
+                     v-for="(option, index) in product.configurable_options"
+                     v-if="(!product.errors || Object.keys(product.errors).length === 0) && Object.keys(configuration).length > 0"
+                     :key="index"
                 >
-                  <div class="variants-label" data-testid="variantsLabel">
+                  <div class="variants-label"
+                       data-testid="variantsLabel"
+                  >
                     {{ option.label }}
                     <span class="weight-700">
                       {{ configuration[option.attribute_code ? option.attribute_code : option.label.toLowerCase()].label }}
@@ -72,49 +92,49 @@
                   </div>
                   <div class="row top-xs m0 pt15 pb40 variants-wrapper">
                     <div v-if="option.label == 'Color'">
-                      <color-selector
-                        v-for="(c, i) in options[option.attribute_code]"
-                        v-if="isOptionAvailable(c)"
-                        :key="i"
-                        :id="c.id"
-                        :label="c.label"
-                        context="product"
-                        :code="option.attribute_code"
-                        :class="{ active: c.id == configuration[option.attribute_code].id }"
+                      <color-selector v-for="(c, i) in options[option.attribute_code]"
+                                      v-if="isOptionAvailable(c)"
+                                      :key="i"
+                                      :id="c.id"
+                                      :label="c.label"
+                                      context="product"
+                                      :code="option.attribute_code"
+                                      :class="{ active: c.id == configuration[option.attribute_code].id }"
                       />
                     </div>
-                    <div class="sizes" v-else-if="option.label == 'Size'">
-                      <size-selector
-                        v-for="(s, i) in options[option.attribute_code]"
-                        v-if="isOptionAvailable(s)"
-                        :key="i"
-                        :id="s.id"
-                        :label="s.label"
-                        context="product"
-                        :code="option.attribute_code"
-                        class="mr10 mb10"
-                        :class="{ active: s.id == configuration[option.attribute_code].id }"
-                        v-focus-clean
+                    <div class="sizes"
+                         v-else-if="option.label == 'Size'"
+                    >
+                      <size-selector v-for="(s, i) in options[option.attribute_code]"
+                                     v-if="isOptionAvailable(s)"
+                                     :key="i"
+                                     :id="s.id"
+                                     :label="s.label"
+                                     context="product"
+                                     :code="option.attribute_code"
+                                     class="mr10 mb10"
+                                     :class="{ active: s.id == configuration[option.attribute_code].id }"
+                                     v-focus-clean
                       />
                     </div>
-                    <div :class="option.attribute_code" v-else>
-                      <generic-selector
-                        v-for="(s, i) in options[option.attribute_code]"
-                        v-if="isOptionAvailable(s)"
-                        :key="i"
-                        :id="s.id"
-                        :label="s.label"
-                        context="product"
-                        :code="option.attribute_code"
-                        class="mr10 mb10"
-                        :class="{ active: s.id == configuration[option.attribute_code].id }"
-                        v-focus-clean
+                    <div :class="option.attribute_code"
+                         v-else
+                    >
+                      <generic-selector v-for="(s, i) in options[option.attribute_code]"
+                                        v-if="isOptionAvailable(s)"
+                                        :key="i"
+                                        :id="s.id"
+                                        :label="s.label"
+                                        context="product"
+                                        :code="option.attribute_code"
+                                        class="mr10 mb10"
+                                        :class="{ active: s.id == configuration[option.attribute_code].id }"
+                                        v-focus-clean
                       />
                     </div>
-                    <span
-                      v-if="option.label == 'Size'"
-                      @click="openSizeGuide"
-                      class="
+                    <span v-if="option.label == 'Size'"
+                          @click="openSizeGuide"
+                          class="
                         p0 ml30 inline-flex middle-xs no-underline h5
                         action size-guide pointer cl-secondary
                       "
@@ -128,37 +148,34 @@
                 </div>
               </div>
             </div>
-            <product-links
-              v-if="product.type_id =='grouped' && !loading"
-              :products="product.product_links"
+            <product-links v-if="product.type_id =='grouped' && !loading"
+                           :products="product.product_links"
             />
-            <product-bundle-options
-              v-if="product.bundle_options && product.bundle_options.length > 0 && !loading"
-              :product="product"
+            <product-bundle-options v-if="product.bundle_options && product.bundle_options.length > 0 && !loading"
+                                    :product="product"
             />
-            <product-custom-options
-              v-else-if="product.custom_options && product.custom_options.length > 0 && !loading"
-              :product="product"
+            <product-custom-options v-else-if="product.custom_options && product.custom_options.length > 0 && !loading"
+                                    :product="product"
             />
-            <div class="row m0 mb35" v-if="product.type_id !== 'grouped' && product.type_id !== 'bundle'">
-              <base-input-number
-                :name="$t('Quantity')"
-                v-model="product.qty"
-                :min="1"
-                @blur="$v.$touch()"
-                :validations="[
-                  {
-                    condition: $v.product.qty.$error && !$v.product.qty.minValue,
-                    text: $t('Quantity must be above 0')
-                  }
-                ]"
+            <div class="row m0 mb35"
+                 v-if="product.type_id !== 'grouped' && product.type_id !== 'bundle'"
+            >
+              <base-input-number :name="$t('Quantity')"
+                                 v-model="product.qty"
+                                 :min="1"
+                                 @blur="$v.$touch()"
+                                 :validations="[
+                                   {
+                                     condition: $v.product.qty.$error && !$v.product.qty.minValue,
+                                     text: $t('Quantity must be above 0')
+                                   }
+                                 ]"
               />
             </div>
             <div class="row m0">
-              <add-to-cart
-                :product="product"
-                :disabled="$v.product.qty.$error && !$v.product.qty.minValue"
-                class="col-xs-12 col-sm-4 col-md-6"
+              <add-to-cart :product="product"
+                           :disabled="$v.product.qty.$error && !$v.product.qty.minValue"
+                           class="col-xs-12 col-sm-4 col-md-6"
               />
             </div>
             <div class="row py40 add-to-buttons">
@@ -166,14 +183,13 @@
                 <wishlist-button :product="product" />
               </div>
               <div class="col-xs-6 col-sm-3 col-md-6 product__add-to-compare">
-                <button
-                  @click="isOnCompare ? removeFromList('compare') : addToList('compare')"
-                  class="
+                <button @click="isOnCompare ? removeFromList('compare') : addToList('compare')"
+                        class="
                     p0 inline-flex middle-xs bg-cl-transparent brdr-none
                     action h5 pointer cl-secondary
                   "
-                  type="button"
-                  data-testid="addToCompare"
+                        type="button"
+                        data-testid="addToCompare"
                 >
                   <i class="pr5 material-icons">compare</i>
                   <template v-if="!isOnCompare">
@@ -193,72 +209,79 @@
       <h2 class="h3 m0 mb10 serif lh20 details-title">
         {{ $t('Product details') }}
       </h2>
-      <div
-        class="h4 details-wrapper"
-        :class="{'details-wrapper--open': detailsOpen}"
+      <div class="h4 details-wrapper"
+           :class="{'details-wrapper--open': detailsOpen}"
       >
         <div class="row between-md m0">
           <div class="col-xs-12 col-sm-6">
-            <div
-              class="lh30 h5"
-              itemprop="description"
-              v-html="product.description"
+            <div class="lh30 h5"
+                 itemprop="description"
+                 v-html="product.description"
             />
           </div>
           <div class="col-xs-12 col-sm-5">
             <ul class="attributes p0 pt5 m0">
-              <product-attribute
-                :key="attr.attribute_code"
-                v-for="attr in customAttributes"
-                :product="product"
-                :attribute="attr"
-                empty-placeholder="N/A"
+              <product-attribute :key="attr.attribute_code"
+                                 v-for="attr in customAttributes"
+                                 :product="product"
+                                 :attribute="attr"
+                                 empty-placeholder="N/A"
               />
             </ul>
           </div>
-          <div
-            class="details-overlay"
-            @click="showDetails"
+          <div class="details-overlay"
+               @click="showDetails"
           />
         </div>
       </div>
     </section>
-    <reviews :product-id="originalProduct.id" v-show="OnlineOnly" />
-    <related-products
-      type="upsell"
-      :heading="$t('We found other products you might like')"
+    <reviews :product-id="originalProduct.id"
+             v-show="OnlineOnly"
+    />
+    <related-products type="upsell" use-case="sim"
+                      :recommendations="sim"
+                      :show="true"
+                      :heading="$t('We found other products you might like')"
+    />
+    <related-products type="upsell" use-case="also"
+                      :recommendations="also"
+                      :show="also.length > 0"
+                      :heading="$t('Recommended for you')"
     />
     <promoted-offers single-banner />
-    <related-products type="related" />
+    <!-- <related-products type="related" use-case="also" :recommendations="also" /> -->
     <SizeGuide />
   </div>
 </template>
 
 <script>
-import { minValue } from 'vuelidate/lib/validators'
-import Product from '@vue-storefront/core/pages/Product'
-import VueOfflineMixin from 'vue-offline/mixin'
-import RelatedProducts from 'theme/components/core/blocks/Product/Related.vue'
-import Reviews from 'theme/components/core/blocks/Reviews/Reviews.vue'
-import AddToCart from 'theme/components/core/AddToCart.vue'
-import GenericSelector from 'theme/components/core/GenericSelector'
-import ColorSelector from 'theme/components/core/ColorSelector.vue'
-import SizeSelector from 'theme/components/core/SizeSelector.vue'
-import Breadcrumbs from 'theme/components/core/Breadcrumbs.vue'
-import ProductAttribute from 'theme/components/core/ProductAttribute.vue'
-import ProductLinks from 'theme/components/core/ProductLinks.vue'
-import ProductCustomOptions from 'theme/components/core/ProductCustomOptions.vue'
-import ProductBundleOptions from 'theme/components/core/ProductBundleOptions.vue'
-import ProductGallery from 'theme/components/core/ProductGallery'
-import PromotedOffers from 'theme/components/theme/blocks/PromotedOffers/PromotedOffers'
-import focusClean from 'theme/components/theme/directives/focusClean'
-import WebShare from '@vue-storefront/core/modules/social-share/components/WebShare'
-import BaseInputNumber from 'theme/components/core/blocks/Form/BaseInputNumber'
-import SizeGuide from 'theme/components/core/blocks/Product/SizeGuide'
+import { minValue } from 'vuelidate/lib/validators';
+import Product from '@vue-storefront/core/pages/Product';
+import VueOfflineMixin from 'vue-offline/mixin';
+import RelatedProducts from 'theme/components/core/blocks/Product/Related.vue';
+import Reviews from 'theme/components/core/blocks/Reviews/Reviews.vue';
+import AddToCart from 'theme/components/core/AddToCart.vue';
+import GenericSelector from 'theme/components/core/GenericSelector';
+import ColorSelector from 'theme/components/core/ColorSelector.vue';
+import SizeSelector from 'theme/components/core/SizeSelector.vue';
+import Breadcrumbs from 'theme/components/core/Breadcrumbs.vue';
+import ProductAttribute from 'theme/components/core/ProductAttribute.vue';
+import ProductLinks from 'theme/components/core/ProductLinks.vue';
+import ProductCustomOptions from 'theme/components/core/ProductCustomOptions.vue';
+import ProductBundleOptions from 'theme/components/core/ProductBundleOptions.vue';
+import ProductGallery from 'theme/components/core/ProductGallery';
+import PromotedOffers from 'theme/components/theme/blocks/PromotedOffers/PromotedOffers';
+import focusClean from 'theme/components/theme/directives/focusClean';
+import WebShare from '@vue-storefront/core/modules/social-share/components/WebShare';
+import BaseInputNumber from 'theme/components/core/blocks/Form/BaseInputNumber';
+import SizeGuide from 'theme/components/core/blocks/Product/SizeGuide';
 
 export default {
   components: {
-    'WishlistButton': () => import(/* webpackChunkName: "wishlist" */'theme/components/core/blocks/Wishlist/AddToWishlist'),
+    WishlistButton: () =>
+      import(
+        /* webpackChunkName: "wishlist" */ 'theme/components/core/blocks/Wishlist/AddToWishlist'
+      ),
     AddToCart,
     Breadcrumbs,
     ColorSelector,
@@ -280,37 +303,47 @@ export default {
   data () {
     return {
       detailsOpen: false
-    }
+    };
   },
   directives: { focusClean },
   computed: {
     structuredData () {
       return {
-        availability: (this.product.stock.is_in_stock) ? 'InStock' : 'OutOfStock'
-      }
+        availability: this.product.stock.is_in_stock ? 'InStock' : 'OutOfStock'
+      };
+    },
+    also () {
+      return this.$store.state['recommendation-engine'].also
+    },
+    sim () {
+      return this.$store.state['recommendation-engine'].sim
     }
   },
   methods: {
     showDetails (event) {
-      this.detailsOpen = true
-      event.target.classList.add('hidden')
+      this.detailsOpen = true;
+      event.target.classList.add('hidden');
     },
     notifyOutStock () {
       this.$store.dispatch('notification/spawnNotification', {
         type: 'error',
-        message: this.$t('The product is out of stock and cannot be added to the cart!'),
+        message: this.$t(
+          'The product is out of stock and cannot be added to the cart!'
+        ),
         action1: { label: this.$t('OK') }
-      })
+      });
     },
     notifyWrongAttributes () {
       this.$store.dispatch('notification/spawnNotification', {
         type: 'warning',
-        message: this.$t('No such configuration for the product. Please do choose another combination of attributes.'),
+        message: this.$t(
+          'No such configuration for the product. Please do choose another combination of attributes.'
+        ),
         action1: { label: this.$t('OK') }
-      })
+      });
     },
     openSizeGuide () {
-      this.$bus.$emit('modal-show', 'modal-sizeguide')
+      this.$bus.$emit('modal-show', 'modal-sizeguide');
     }
   },
   validations: {
@@ -320,12 +353,12 @@ export default {
       }
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-@import '~theme/css/variables/colors';
-@import '~theme/css/helpers/functions/color';
+@import "~theme/css/variables/colors";
+@import "~theme/css/helpers/functions/color";
 $color-primary: color(primary);
 $color-tertiary: color(tertiary);
 $color-secondary: color(secondary);
@@ -388,7 +421,7 @@ $bg-secondary: color(secondary, $colors-background);
     padding-bottom: 30px;
   }
 
- .sizes {
+  .sizes {
     @media (max-width: 767px) {
       width: 100%;
     }

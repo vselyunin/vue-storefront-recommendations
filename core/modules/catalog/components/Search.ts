@@ -4,7 +4,8 @@ import onEscapePress from '@vue-storefront/core/mixins/onEscapePress'
 import { prepareQuickSearchQuery } from '@vue-storefront/core/modules/catalog/queries/searchPanel'
 import RootState from '@vue-storefront/core/types/RootState'
 import { Logger } from '@vue-storefront/core/lib/logger'
-
+import { mapGetters } from 'vuex';
+import {filterByRecommendations} from '@vue-storefront/core/modules/recommendation-engine/mixins';
 export const Search = {
   name: 'SearchPanel',
   data () {
@@ -29,6 +30,7 @@ export const Search = {
     localStorage.setItem(`shop/user/searchQuery`, this.search);
   },
   methods: {
+    filterByRecommendations,
     onEscapePress () {
       this.closeSearchpanel()
     },
@@ -48,9 +50,17 @@ export const Search = {
         this.start = startValue
         this.readMore = true
         this.$store.dispatch('product/list', { query, start: this.start, size: this.size, updateState: false }).then(resp => {
-          this.products = resp.items
-          this.start = startValue + this.size
-          this.emptyResults = resp.items.length < 1
+          this.$store.dispatch('recommendation-engine/load',
+            {
+              'useCase': 'demo',
+              'basket': null,
+              'context': null,
+              'count': 4
+            }).then(res => {
+            this.products = filterByRecommendations(resp.items, res)
+            this.start = startValue + this.size
+            this.emptyResults = resp.items.length < 1
+          });
         }).catch((err) => {
           Logger.error(err, 'components-search')()
         })
@@ -87,7 +97,14 @@ export const Search = {
     },
     ...mapState({
       isOpen: (state: RootState) => state.ui.searchpanel
-    })
+    }),
+    ...mapGetters('user', ['isLoggedIn']),
+    product () {
+      return this.$store.state.product;
+    },
+    demo () {
+      return this.$store.state['recommendation-engine'].demo
+    }
   },
   mixins: [onEscapePress]
 }

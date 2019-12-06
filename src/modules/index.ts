@@ -10,6 +10,7 @@ import { Wishlist } from '@vue-storefront/core/modules/wishlist'
 import { Newsletter } from '@vue-storefront/core/modules/newsletter'
 import { Notification } from '@vue-storefront/core/modules/notification'
 import { RecentlyViewed } from '@vue-storefront/core/modules/recently-viewed'
+import { RecommendationEngine } from '@vue-storefront/core/modules/recommendation-engine'
 import { Url } from '@vue-storefront/core/modules/url'
 import { Homepage } from './homepage'
 import { Claims } from './claims'
@@ -64,6 +65,7 @@ export const registerModules: VueStorefrontModule[] = [
   Notification,
   Ui,
   RecentlyViewed,
+  RecommendationEngine,
   Homepage,
   Claims,
   PromotedOffers,

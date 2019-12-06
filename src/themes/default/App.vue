@@ -26,6 +26,10 @@ export default {
       return `${(this.$route.meta.layout || 'default')}-layout`
     }
   },
+  mounted () {
+    this.$store.state['recommendation-engine'].user = this.$route.query.user || localStorage.getItem('/recommendation-engine/user') || 'Anonymous'
+    if (this.$route.query.user) localStorage.setItem('/recommendation-engine/user', this.$route.query.user)
+  },
   components: {
     DefaultLayout,
     EmptyLayout,

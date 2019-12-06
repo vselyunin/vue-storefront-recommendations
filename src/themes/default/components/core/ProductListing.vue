@@ -1,10 +1,16 @@
 <template>
-  <div class="product-listing row m0 center-xs start-md">
+  <div class="product-listing row m0 center-xs start-md" style="width: 100%;">
+    <!-- <div
+      v-for="(product, key) in products"
+      :key="product.id"
+      class="col-sm-6 flex"
+      :class="['col-md-' + (12/columns), wide(product.sale, product.new, key)]"
+    > -->
     <div
       v-for="(product, key) in products"
       :key="product.id"
       class="col-sm-6 flex"
-      :class="['col-md-' + (12/columns)%10, wide(product.sale, product.new, key)]"
+      :class="['col-md-' + (12/columns), wide(product.sale, product.new, key)]"
     >
       <product-tile :product="product" />
     </div>

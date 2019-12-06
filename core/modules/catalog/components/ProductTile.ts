@@ -38,6 +38,9 @@ export const ProductTile = {
     },
     isNew () {
       return this.product.new === '1' ? 'new' : ''
+    },
+    isRec () {
+      return this.product.rec === '1' ? 'rec' : ''
     }
   }
 }

@@ -1,7 +1,7 @@
 import SearchQuery from '@vue-storefront/core/lib/search/searchQuery'
 import config from 'config'
 
-export function prepareQuery ({queryText = '', filters = [], queryConfig = ''}) {
+export function prepareQuery ({queryText = '', filters = [], queryConfig = '', hideVSFQuerry = false}) {
   let query = new SearchQuery()
   // prepare filters and searchText
   if (filters.length === 0 && queryConfig !== '') {
@@ -30,9 +30,11 @@ export function prepareQuery ({queryText = '', filters = [], queryConfig = ''}) 
   }
 
   // Add basic filters
-  query = query
-    .applyFilter({key: 'visibility', value: {'in': [2, 3, 4]}})
-    .applyFilter({key: 'status', value: {'in': [0, 1]}})
+  if (!hideVSFQuerry) {
+    query = query
+      .applyFilter({key: 'visibility', value: {'in': [2, 3, 4]}})
+      .applyFilter({key: 'status', value: {'in': [0, 1]}})
+  }
 
   return query
 }
