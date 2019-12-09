@@ -8,7 +8,7 @@
         <section class="row m0 between-xs">
           <div class="col-xs-12 col-md-6 center-xs middle-xs image">
             <product-gallery :offline="image"
-                             :gallery="gallery"
+                             :gallery="fg(product,gallery)"
                              :configuration="configuration"
                              :product="product"
             />
@@ -323,6 +323,17 @@ export default {
     showDetails (event) {
       this.detailsOpen = true;
       event.target.classList.add('hidden');
+    },
+    fg (product, gallery) {
+      var globalRegex = RegExp('https', 'g');
+      if (globalRegex.test(product.image)) {
+        return gallery.map(img => {
+          img.src = product.image
+          return img
+        })
+      } else {
+        return gallery
+      }
     },
     notifyOutStock () {
       this.$store.dispatch('notification/spawnNotification', {

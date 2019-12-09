@@ -14,9 +14,15 @@
         class="product-image relative bg-cl-secondary"
         :class="[{ rec: labelsActive && isRec }, { sale: labelsActive && isOnSale }, { new: labelsActive && isNew }]"
       >
-        <product-image
+        <!-- <product-image
           class="product-image__content"
           :image="thumbnailObj"
+          :alt="product.name | htmlDecode"
+          data-testid="productImage"
+        /> -->
+        <product-image
+          class="product-image__content"
+          :image="fg(product, thumbnailObj)"
           :alt="product.name | htmlDecode"
           data-testid="productImage"
         />
@@ -82,6 +88,14 @@ export default {
     }
   },
   methods: {
+    fg (product, thumbnailObj) {
+      var globalRegex = RegExp('https', 'g');
+      if (globalRegex.test(product.image)) {
+        return { src: product.image, loading: product.image }
+      } else {
+        return thumbnailObj
+      }
+    },
     sendDataToRecomendations () {
       this.$store.dispatch('recommendation-engine/load',
         { 'useCase': 'also',
