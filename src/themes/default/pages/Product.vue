@@ -325,15 +325,24 @@ export default {
       event.target.classList.add('hidden');
     },
     fg (product, gallery) {
-      var globalRegex = RegExp('https', 'g');
-      if (globalRegex.test(product.image)) {
-        return gallery.map(img => {
-          img.src = product.image
+      let globalRegex = RegExp('https', 'g');
+      // if (globalRegex.test(product.image) && gallery) {
+      //   return gallery.map(img => {
+      //     img.src = product.image
+      //     // img.src = decodeURIComponent(img.src.slice(48))
+      //     return img
+      //   })
+      // } else {
+      //   return gallery
+      // }
+      return gallery.map(img => {
+        if (globalRegex.test(img.src.slice(6))) {
+          img.src = decodeURIComponent(img.src.slice(48))
           return img
-        })
-      } else {
-        return gallery
-      }
+        } else {
+          return img
+        }
+      })
     },
     notifyOutStock () {
       this.$store.dispatch('notification/spawnNotification', {

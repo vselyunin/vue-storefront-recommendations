@@ -14,6 +14,8 @@
         class="product-image relative bg-cl-secondary"
         :class="[{ rec: labelsActive && isRec }, { sale: labelsActive && isOnSale }, { new: labelsActive && isNew }]"
       >
+        <img style="width: 60px; margin-top: 3%; margin-left: 26%; position: absolute;" src="../../assets/604px-Adidas_Logo.svg.png" alt="">
+
         <!-- <product-image
           class="product-image__content"
           :image="thumbnailObj"

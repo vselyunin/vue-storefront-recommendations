@@ -1,6 +1,6 @@
 <template>
   <div class="pt20">
-    <div class="row pl20">
+    <!-- <div class="row pl20">
       <div class="col-xs-1 col-sm-2 col-md-1">
         <div
           class="number-circle lh35 cl-white brdr-circle align-center weight-700"
@@ -28,8 +28,8 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="row pl20" v-if="isActive">
+    </div> -->
+    <!-- <div class="row pl20" v-if="isActive">
       <div class="hidden-xs col-sm-2 col-md-1" />
       <div class="col-xs-11 col-sm-9 col-md-10">
         <div class="row">
@@ -247,11 +247,14 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
+    <div id="map" class="map" />
   </div>
 </template>
 
 <script>
+import tt from '@tomtom-international/web-sdk-maps';
+
 import { required, minLength } from 'vuelidate/lib/validators'
 import { unicodeAlpha, unicodeAlphaNum } from '@vue-storefront/core/helpers/validators'
 import { Shipping } from '@vue-storefront/core/modules/checkout/components/Shipping'
@@ -269,6 +272,11 @@ export default {
     BaseCheckbox,
     BaseInput,
     BaseSelect
+  },
+  data () {
+    return {
+      map: {}
+    }
   },
   mixins: [Shipping],
   computed: {
@@ -316,6 +324,22 @@ export default {
         unicodeAlpha
       }
     }
+  },
+  methods: {
+    initializeMap () {
+      this.map = tt.map({
+        key: '6sQYcjR2iNWspONoUBbGLzG2ErCfMjyo',
+        container: 'map',
+        style: 'tomtom://vector/1/basic-main',
+        center: [4.952129606368089, 52.31404857051368],
+        zoom: 15
+      }).addControl(new tt.FullscreenControl());
+    }
+  },
+  mounted () {
+    this.initializeMap()
+    this.map.addControl(new tt.FullscreenControl());
+    this.map.addControl(new tt.NavigationControl());
   }
 }
 </script>

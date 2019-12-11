@@ -1,6 +1,6 @@
 <template>
   <div id="home">
-    <head-image />
+    <!-- <head-image /> -->
 
     <promoted-offers />
 

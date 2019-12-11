@@ -112,8 +112,19 @@ export default {
     },
     image () {
       return {
-        loading: this.thumbnail,
-        src: this.thumbnail
+        loading: this.checkImgUrl(this.thumbnail),
+        src: this.checkImgUrl(this.thumbnail)
+      }
+    }
+  },
+  methods: {
+    checkImgUrl (img) {
+      let globalRegex = RegExp('https', 'g');
+      if (globalRegex.test(img.slice(6))) {
+        img = decodeURIComponent(img.slice(48))
+        return img
+      } else {
+        return img
       }
     }
   },

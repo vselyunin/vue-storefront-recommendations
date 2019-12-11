@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row" v-show="!isThankYouPage">
         <div class="col-sm-7 col-xs-12 pb70">
-          <div class="checkout-title py5 px20">
+          <!-- <div class="checkout-title py5 px20">
             <h1>
               {{ $t('Checkout') }}
             </h1>
@@ -12,10 +12,10 @@
             class="line relative"
             :is-active="activeSection.personalDetails"
             :focused-field="focusedField"
-          />
+          /> -->
           <shipping class="line relative" :is-active="activeSection.shipping" v-if="!isVirtualCart" />
-          <payment class="line relative" :is-active="activeSection.payment" />
-          <order-review class="line relative" :is-active="activeSection.orderReview" />
+          <!-- <payment class="line relative" :is-active="activeSection.payment" /> -->
+          <!-- <order-review class="line relative" :is-active="activeSection.orderReview" /> -->
           <div id="custom-steps" />
         </div>
         <div class="hidden-xs col-sm-5 bg-cl-secondary">
