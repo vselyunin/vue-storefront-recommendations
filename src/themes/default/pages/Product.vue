@@ -205,7 +205,7 @@
         </section>
       </div>
     </section>
-    <section class="container px15 pt50 pb35 cl-accent details">
+    <!-- <section class="container px15 pt50 pb35 cl-accent details">
       <h2 class="h3 m0 mb10 serif lh20 details-title">
         {{ $t('Product details') }}
       </h2>
@@ -234,10 +234,10 @@
           />
         </div>
       </div>
-    </section>
-    <reviews :product-id="originalProduct.id"
+    </section> -->
+    <!-- <reviews :product-id="originalProduct.id"
              v-show="OnlineOnly"
-    />
+    /> -->
     <related-products type="upsell" use-case="sim"
                       :recommendations="sim"
                       :show="true"
@@ -246,7 +246,7 @@
     <related-products type="upsell" use-case="also"
                       :recommendations="also"
                       :show="also.length > 0"
-                      :heading="$t('Recommended for you')"
+                      :heading="$t('Also buying with')"
     />
     <promoted-offers single-banner />
     <!-- <related-products type="related" use-case="also" :recommendations="also" /> -->

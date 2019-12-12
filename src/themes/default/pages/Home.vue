@@ -16,7 +16,7 @@
       </div>
       <div class="row center-xs">
         <product-listing columns="4"
-                         :products="demo.length > 0 ? demo : everythingNewCollection"
+                         :products="showProductsUnk(demo, unk, everythingNewCollection)"
         />
       </div>
 
@@ -84,7 +84,6 @@ export default {
     TileLinks
   },
   computed: {
-    ...mapGetters('user', ['isLoggedIn']),
     categories () {
       return this.getCategories;
     },
@@ -99,6 +98,9 @@ export default {
     },
     demo () {
       return this.$store.state['recommendation-engine'].demo
+    },
+    unk () {
+      return this.$store.state['recommendation-engine'].unk
     },
     // allRecomendations () {
     //   return this.filterByRecommendations(this.everythingNewCollection, this.all)
@@ -140,7 +142,7 @@ export default {
         'count': 4
       });
     this.$store.dispatch('recommendation-engine/load',
-      { 'useCase': 'demo',
+      { 'useCase': this.$route.query.brand === 'adidas' ? 'unk' : 'demo',
         'basket': null,
         'context': null,
         'count': 4
@@ -216,7 +218,16 @@ export default {
     }
   },
   methods: {
-    filterByRecommendations
+    filterByRecommendations,
+    showProductsUnk (demo, unk, evnc) {
+      if (unk.length > 0) {
+        return unk
+      } else if (demo.length > 0) {
+        return demo
+      } else {
+        return evnc
+      }
+    }
   }
 };
 </script>

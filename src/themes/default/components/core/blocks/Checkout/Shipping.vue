@@ -331,8 +331,8 @@ export default {
         key: '6sQYcjR2iNWspONoUBbGLzG2ErCfMjyo',
         container: 'map',
         style: 'tomtom://vector/1/basic-main',
-        center: [4.952129606368089, 52.31404857051368],
-        zoom: 15
+        center: [13.40509, 52.5200],
+        zoom: 10
       }).addControl(new tt.FullscreenControl());
     }
   },

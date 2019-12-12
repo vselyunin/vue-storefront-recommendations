@@ -7,5 +7,6 @@ export default interface Recommendations {
   demo: any[],
   banner: any[],
   user: string,
-  session: string
+  session: string,
+  unk: [],
 }

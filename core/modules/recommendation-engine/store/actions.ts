@@ -5,6 +5,7 @@ import RootState from '@vue-storefront/core/types/RootState'
 import recommendations from '../types/recommendations'
 import { prepareQuery } from '@vue-storefront/core/modules/catalog/queries/common';
 import { rejects } from 'assert';
+import { router } from '@vue-storefront/core/app'
 
 const actions: ActionTree<recommendations, RootState> = {
   load ({dispatch, commit, state, getters, rootGetters}, obj) {
@@ -15,7 +16,9 @@ const actions: ActionTree<recommendations, RootState> = {
         'useCase': state.showdemo ? 'demo' : obj.useCase,
         'basket': obj.basket,
         'context': null,
-        'count': obj.count
+        'count': obj.count,
+        'text': router.app.$route.query.brand == "adidas" ? "Adidas" : null,
+        'color': router.app.$route.query.brand == "adidas" ? "Black" : null,
       }
       getRecommendations(body).then((res) => {
         const recIds = res.data.map(rec =>

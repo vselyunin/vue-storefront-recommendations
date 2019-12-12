@@ -3,7 +3,8 @@ import recommendations from '../types/recommendations'
 import RootState from '@vue-storefront/core/types/RootState'
 
 const getters: GetterTree<recommendations, RootState> = {
-  user: (state, getters, rootState, rootGetters) => rootGetters['user/isLoggedIn'] ? state.user : 'Anonymous',
+  // user: (state, getters, rootState, rootGetters) => rootGetters['user/isLoggedIn'] ? state.user : 'Anonymous',
+  user: (state, getters, rootState, rootGetters) => state.user,
   banners: (state, getters, rootState, rootGetters) => {
     if (getters.user === 'MEl' || getters.user === 'MPun') {
       return {

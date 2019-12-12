@@ -11,6 +11,7 @@ export const module: Module<recommendations, RootState> = {
     user: 'Anonymous',
     session: 'a',
     showdemo: false,
+    unk: [],
     all: [],
     realtime: [],
     also: [],

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // allow use http client without Vue instance
-const apiUrl = 'https://recs-pxqqamhyja-uc.a.run.app/'
+const apiUrl = 'http://172.21.131.97:8080/'
 export const http = axios.create({
   baseURL: apiUrl,
   headers: {
