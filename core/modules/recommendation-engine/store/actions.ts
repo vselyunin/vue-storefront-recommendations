@@ -17,8 +17,8 @@ const actions: ActionTree<recommendations, RootState> = {
         'basket': obj.basket,
         'context': null,
         'count': obj.count,
-        'text': router.app.$route.query.brand == "adidas" ? "Adidas" : null,
-        'color': router.app.$route.query.brand == "adidas" ? "Black" : null,
+        'text': router.app.$route.query.brand == 'adidas' ? 'Adidas' : null,
+        'color': router.app.$route.query.brand == 'adidas' ? 'Black' : null
       }
       getRecommendations(body).then((res) => {
         const recIds = res.data.map(rec =>

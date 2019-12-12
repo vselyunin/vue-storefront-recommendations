@@ -8,5 +8,5 @@ export default interface Recommendations {
   banner: any[],
   user: string,
   session: string,
-  unk: [],
+  unk: []
 }
